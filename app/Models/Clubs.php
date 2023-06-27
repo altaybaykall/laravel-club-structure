@@ -21,7 +21,6 @@ class Clubs extends Model
         return $this->belongstoMany(User::class,'user_club','club_id','user_id');
     }
 
-
     public  function  events(){
         return $this->hasMany(ClubEvents::class,'club_id','id');
     }

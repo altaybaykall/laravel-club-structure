@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\ClubEvents;
 use App\Models\Clubs;
+use App\Policies\ClubEventPolicy;
 use App\Policies\ClubPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Clubs::class => ClubPolicy::class
+        Clubs::class => ClubPolicy::class,
+        ClubEvents::class => ClubEventPolicy::class,
     ];
 
     /**

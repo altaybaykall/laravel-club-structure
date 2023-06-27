@@ -17,21 +17,36 @@ class ClubPolicy
         //
     }
 
+
+    public function memberCheck(User $user,Clubs $club): bool
+    {
+        $userInClub = $club->user()->where('user_id', $user->id)->withPivot('role')->first();
+
+        if ($userInClub) {
+           return  !$userInClub->pivot->role == '0';
+        }
+
+        return true; // Kulübe üye olmayanlar katıl butonunu görebilir
+    }
     /**
      * Determine whether the user can view the model.
      */
     public function view(User $user, Clubs $club): bool
     {
-        if ($user->hasRole('Super-Admin')) {
+
+        if ($user->hasRole('Super-Admin|Editor')) {
             return true;
         }
-        if (!is_null($club->user->firstWhere('id',$user->id))) {
-          return $club->user->firstWhere('id',$user->id)->pivot->user_id == $user->id ;
+        $userInClub = $club->user()->where('user_id', $user->id)->withPivot('role')->first();
+        if ($userInClub) {
+           return  $userInClub->pivot->user_id == $user->id && !$userInClub->pivot->role == '0';
         }
+        return false;
+    }
 
-       return false;
-
-
+    public function memberLeft(User $user,Clubs $club): bool
+    {
+            return  $user->id !== $club->club_manager;
     }
 
     /**
@@ -47,7 +62,7 @@ class ClubPolicy
      */
     public function update(User $user, Clubs $club): bool
     {
-        if ($user->hasRole('Super-Admin')) {
+        if ($user->hasRole('Super-Admin|Editor')) {
             return true;
         }
 

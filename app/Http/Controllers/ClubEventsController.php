@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClubEventRequest;
 use App\Models\ClubEvents;
+use App\Models\Clubs;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ClubEventsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['permission:clubEvent-create|clubEvent-delete|clubEvent-join|clubEvent-edit']);
+        $this->middleware('auth');
+        $this->middleware(['permission:clubEvent-create|clubEvent-delete|clubEvent-join|clubEvent-edit']);
     }
     public  function  addClubEvent(ClubEventRequest $request) {
 
@@ -42,4 +45,5 @@ class ClubEventsController extends Controller
          $event->delete();
          return back();
     }
+
 }

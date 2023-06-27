@@ -16,7 +16,7 @@
             <th scope="col">Bölüm</th>
             <th scope="col">Logo</th>
             <th scope="col">Kuruluş Tarihi</th>
-            <th scope="col">Kulüp Yöneticisi</th>
+
             @auth<th>Detay</th>@endauth
         </tr>
         </thead>
@@ -29,7 +29,6 @@
                 <td>{{$myclub->club_department}}</td>
                 <td><img style="height: 25px ; width: 25px;" src="storage/club_logos/{{$myclub->club_logo}}"></td>
                 <td>{{$myclub->created_at}}</td>
-                <td>{{$myclub->getManager->name}}</td>
                 <td><a href="/club/detay/{{$myclub->id}}"><button class="btn btn-primary">Göster</button></a></td>
             </tr>
 
@@ -47,7 +46,6 @@
             <th scope="col">Bölüm</th>
             <th scope="col">Logo</th>
             <th scope="col">Kuruluş Tarihi</th>
-            <th scope="col">Kulüp Yöneticisi</th>
             @auth<th>Katıl</th>@endauth
         </tr>
         </thead>
@@ -60,14 +58,23 @@
             <td>{{$club->club_department}}</td>
             <td><img style="height: 25px ; width: 25px;" src="storage/club_logos/{{$club->club_logo}}"></td>
                 <td>{{$club->created_at}}</td>
-                <td>{{$club->club_manager}}</td>
-                <td><form action="/club/user/join/{{$club->id}}" method="POST">
-                        @csrf
-                        <button class="btn-primary" type="submit" >Katıl</button>
-                    </form></td>
-                <td><a href="/club/detay/{{$club->id}}"><button class="btn btn-primary">Göster</button></a></td>
-        </tr>
 
+                @can('memberCheck', $club)
+                     @if(!$club->user()->where('user_id',Auth::user()->id)->exists())
+                    <td><form action="/club/user/join/{{$club->id}}" method="POST">
+                         @csrf
+                        <button class="btn-primary" type="submit" >Katıl</button>
+                    </form> </td>
+
+                    @endif
+                @else
+                <td>    <button class="btn-warning"  disabled type="submit" >İstek Gönderildi</button>
+                @endcan</td>
+
+               @can('view', $club)
+                <td><a href="/club/detay/{{$club->id}}"><button class="btn btn-primary">Göster</button></a></td>
+                   @endcan
+        </tr>
         @endforeach
         </tbody>
     </table>

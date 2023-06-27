@@ -28,24 +28,13 @@ class ClubUsersController extends Controller
         return back();
     }
     public  function  userLeftClub(Clubs $id) {
-        $user = Auth::user()->id;
-        $id->user()->detach($user);
-        return back();
+        $user = Auth::user();
+        $id->user()->detach($user->id);
+        $user->removeRole('clubMember');
+        return redirect('/club');
 
     }
 
-    public  function userAccept($id,Clubs $clubId) {
-        $user =User::where('id',$id)->first();
-        $clubId->user()->where('user_id', $user->id)->update(['role' => 1]);
-        $user->assignRole('clubMember');
-        return back();
-    }
 
-
-    public  function userDeny($id,Clubs $clubId) {
-        $user =User::where('id',$id)->first();
-        $clubId->user()->where('user_id', $user->id)->delete();
-        return back();
-    }
 
 }

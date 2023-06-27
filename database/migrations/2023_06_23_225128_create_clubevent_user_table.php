@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_club', function (Blueprint $table) {
+        Schema::create('club_event_user', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('club_id')->unsigned();
-            $table->foreign('club_id')->references('id')->on('clubs')->onDelete('cascade');
+            $table->bigInteger('event_id')->unsigned();
+            $table->foreign('event_id')->references('id')->on('club_events')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('role')->default(0);
-
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_club');
+        Schema::dropIfExists('clubevent_user');
     }
 };
