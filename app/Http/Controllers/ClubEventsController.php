@@ -24,8 +24,9 @@ class ClubEventsController extends Controller
             'event_finish_date' => $request['event_finish_date'],
             'event_owner' => Auth::user()->name,
             'club_id' => $request->id,
+            'user_limit' => $request['user_limit'],
         ]);
-        return redirect('/club');
+        return back();
     }
     public function editClubEvent(ClubEvents $event)
     {

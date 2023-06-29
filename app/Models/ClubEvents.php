@@ -10,7 +10,13 @@ class ClubEvents extends Model
     use HasFactory;
 
     protected $table = "club_events";
-    public $fillable= ['event_title','event_content','event_start_date','event_finish_date','event_owner','club_id'];
+    public $fillable= ['event_title',
+        'event_content',
+        'event_start_date',
+        'event_finish_date',
+        'event_owner',
+        'club_id',
+        'user_limit'];
 
 
     public function clubs()
@@ -21,4 +27,6 @@ class ClubEvents extends Model
     public  function  user(){
         return $this->belongstoMany(User::class,'club_event_user','event_id','user_id');
     }
+
+
 }

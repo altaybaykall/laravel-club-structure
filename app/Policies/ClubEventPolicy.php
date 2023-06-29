@@ -21,9 +21,9 @@ class ClubEventPolicy
      */
     public function view(User $user, ClubEvents $clubEvents): bool
     {
+
         // Kulüp üyesi etkinliğe katılmış mı katılmamış mı kontrolü
-        if ($user->can('clubEvent-join')) {
-           $userInClub = $clubEvents->user()->where('user_id', $user->id)->first();
+        if ($user->can('clubEvent-join')) {$userInClub = $clubEvents->user()->where('user_id', $user->id)->first();
             if (!$userInClub) {
                 return true;
             }

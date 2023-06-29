@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('club_logo');
             $table->string('club_slug');
             $table->bigInteger('club_manager')->unsigned();
-            $table->foreign('club_manager')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('club_manager')->references('id')->on('users');
             $table->timestamps();
         });
     }

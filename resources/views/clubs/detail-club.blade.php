@@ -65,7 +65,7 @@
             </tbody>
         </table>
 
-            <h1 style="font-size: 2rem"> {{$club->club_name}} Etkinlikleri</h1>
+            <h1 style="font-size: 2rem"> {{$club->club_name}}  Mevcut Etkinlikleri</h1>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -73,24 +73,33 @@
                     <th scope="col">Event İçerik</th>
                     <th scope="col">Bşlngç Tarih</th>
                     <th scope="col">Bitiş Tarih</th>
-                    <th>Kulüp</th>
                     <th>Oluşturan</th>
+                    <th>Katılım Sınırı (Kişi)</th>
+                    <th>Katıl</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($club->events as $event)
+                @foreach($events as $event)
                     <tr>
                         <th>{{$event->event_title}}</th>
                         <th>{{$event->event_content}}</th>
                         <td>{{$event->event_start_date}}</td>
                         <td>{{$event->event_finish_date}}</td>
-                        <td>{{$event->club}}</td>
                         <td>{{$event->event_owner}}</td>
-                       @can('view',$event)
-                        <td><form action="/club/event/join/{{$event->id}}" method="POST">
+                        <td>{{$event->user_limit}} / {{$event->user_count}}</td>
+                       @can('view', $event)
+                        <td>
+                            @if (session()->has('event_limit' . $event->id))
+                                <div class="form mt-2 p-0 ">
+                                    <div style="font-size: 0.7rem" class="p-2 alert alert-danger text-enter shadow-sm bg-red text-sm">
+                                        {{session('event_limit' . $event->id)}}
+                                    </div>
+                                </div>
+                            @else
+                            <form action="/club/event/join/{{$event->id}}" method="POST">
                                 @csrf
                                 <button class="btn-primary" type="submit" >Etkinliğe Katıl</button>
-                            </form></td>
+                            </form></td>@endif
                              @else
                         <td><form action="/club/event/left/{{$event->id}}" method="POST">
                                 @csrf
@@ -105,7 +114,7 @@
                 </tbody>
             </table>
 
-            <h1 style="font-size: 2rem"> AKTİF KULÜP ÜYELER</h1>
+            <h1 style="font-size: 2rem"> AKTİF  ÜYELER</h1>
             <table class="table table-striped">
                 <thead>
                 <tr>

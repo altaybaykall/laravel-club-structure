@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('event_owner');
             $table->dateTime('event_start_date');
             $table->dateTime('event_finish_date');
+            $table->integer('user_limit')->unsigned()->nullable();
             $table->timestamps();
         });
     }

@@ -47,8 +47,10 @@ class ClubManagerController extends Controller
         $isMember = Gate::inspect('view', $club);
         if ($isMember->allowed()) {
             $pending = $club->user()->where('role','0')->get();
+            $events = $club->events()->where('event_start_date', '>=', now())->get();
+            $oldEvents = $club->events()->where('event_start_date', '<=', now())->get();
             $approved = $club->user()->where('role','1')->get()->except('user_id',Auth::user()->id);
-            return view('clubs/manage-club', compact('club','pending','approved'));
+            return view('clubs/manage-club', compact('club','pending','approved','events','oldEvents'));
         }
         return back();
 
@@ -63,8 +65,7 @@ class ClubManagerController extends Controller
 
 
     public  function userDeny($id,Clubs $clubId) {
-        $user =User::where('id',$id)->first();
-        $clubId->user()->where('user_id', $user->id)->delete();
+        $clubId->user()->detach($id);;
         return back();
     }
 }

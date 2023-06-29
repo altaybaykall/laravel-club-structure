@@ -26,6 +26,7 @@ class ClubEventRequest extends FormRequest
             'event_content' => 'required','string',
             'event_start_date'=> 'date',
             'event_finish_date' => 'date',
+            'user_limit' => 'integer',
         ];
     }
 }

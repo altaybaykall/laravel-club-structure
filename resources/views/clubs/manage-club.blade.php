@@ -99,6 +99,11 @@
                         <input name="event_finish_date" id="dep" class="form-control" type="date"  autocomplete="off" />
 
                     </div>
+                    <div class="form-group mb-2">
+                        <label for="dep" class="text-muted mb-0"><small>Kişi Sınırı</small></label>
+                        <input name="user_limit" id="dep" class="form-control" type="number"  autocomplete="off" />
+
+                    </div>
 
                     <button type="submit" class="btn btn-default btn-success btn-xs">Kaydet</button>
                 </form>
@@ -111,19 +116,20 @@
                         <th scope="col">Event İçerik</th>
                         <th scope="col">Bşlngç Tarih</th>
                         <th scope="col">Bitiş Tarih</th>
-                        <th>Kulüp</th>
                         <th>Oluşturan</th>
+                        <th>Katılan Üyeler</th>
+                        <th colspan="2">Düzenle</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($club->events as $event)
+                    @foreach($events as $event)
                         <tr>
                             <th>{{$event->event_title}}</th>
                             <th>{{$event->event_content}}</th>
                             <td>{{$event->event_start_date}}</td>
                             <td>{{$event->event_finish_date}}</td>
-                            <td>{{$event->club}}</td>
                             <td>{{$event->event_owner}}</td>
+                            <td>{{$event->user->pluck('name')}}</td>
 
                             @can('update',$club)
                                 <td> <form  method="POST" action="/club/event/delete/{{$event->id}}">
@@ -199,6 +205,43 @@
                     </table>
 
                 @endcan
+                <h1 style="font-size: 2rem"> Geçmiş {{$club->club_name}} Etkinlikleri</h1>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Event adı</th>
+                        <th scope="col">Event İçerik</th>
+                        <th scope="col">Bşlngç Tarih</th>
+                        <th scope="col">Bitiş Tarih</th>
+                        <th>Oluşturan</th>
+                        <th>Katılan Üyeler</th>
+                        <th colspan="2">Düzenle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($oldEvents as $event)
+                        <tr>
+                            <th>{{$event->event_title}}</th>
+                            <th>{{$event->event_content}}</th>
+                            <td>{{$event->event_start_date}}</td>
+                            <td>{{$event->event_finish_date}}</td>
+                            <td>{{$event->event_owner}}</td>
+                            <td>{{$event->user->pluck('name')}}</td>
+
+                            @can('update',$club)
+                                <td> <form  method="POST" action="/club/event/delete/{{$event->id}}">
+                                        @csrf
+                                        <button class="btn-danger" type="submit" >Sil</button>
+                                    </form></td>
+                                <td> <form  action="/club/event/edit/{{$event->id}}">
+                                        @csrf
+                                        <button class="btn-info" type="submit" >Düzenle</button>
+                                    </form></td>
+                            @endcan
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
 
             </div>
     </div>

@@ -25,8 +25,11 @@ class ClubController extends Controller
 
     public function getClubs()
     {
+        $user = Auth::user();
+        //$user->assignRole('Super-Admin');
+
         $myclubs = Auth::user()->club()->whereNot('role','0')->get();
-            $clubs = Clubs::with('user', 'events')->get();
+            $clubs = Clubs::with('user')->get();
         return view('clubs/clubs', compact('clubs', 'myclubs'));
     }
 
@@ -36,7 +39,8 @@ class ClubController extends Controller
         $isMember = Gate::inspect('view', $club);
         if ($isMember->allowed()) {
             $approved = $club->user()->where('role','1')->get();
-            return view('clubs/detail-club', compact('club','approved'));
+            $events = $club->events()->where('event_start_date', '>=', now())->withCount('user')->get();
+            return view('clubs/detail-club', compact('club','approved','events'));
         }
         return back();
 
