@@ -65,6 +65,7 @@
                 @enderror
             </div>
             <div class="form-group col  ">
+                <label for="image" class="text-muted mb-0"><small>Logo Seçiniz</small></label>
                 <input type="file" name="file" id="image" placeholder="Resim Seçiniz" accept="image/*"
                       >
                 @error('file')
